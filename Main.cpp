@@ -35,12 +35,23 @@ DWORD getTargetProcess(std::string windowName) {
     return tmpPID;
 }
 
-INPUT getKeyInput(int unicode) {
+INPUT getKeyDownInput(int unicode) {
     INPUT ip;
     ip.type = INPUT_KEYBOARD;
     ip.ki.wScan = MapVirtualKey(unicode, MAPVK_VK_TO_VSC);
     ip.ki.time = 0;
     ip.ki.dwExtraInfo = KEYEVENTF_SCANCODE;
+    ip.ki.wVk = unicode;
+    ip.ki.dwFlags = 0;
+    return ip;
+}
+
+INPUT getKeyUpInput(int unicode) {
+    INPUT ip;
+    ip.type = INPUT_KEYBOARD;
+    ip.ki.wScan = MapVirtualKey(unicode, MAPVK_VK_TO_VSC);
+    ip.ki.time = 0;
+    ip.ki.dwExtraInfo = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
     ip.ki.wVk = unicode;
     ip.ki.dwFlags = 0;
     return ip;
@@ -66,7 +77,7 @@ void simulateKeys(std::vector<INPUT> &inputs)
 void opengMCTerminal() {
     Sleep(200);
     std::vector<INPUT> _keys;
-    _keys.push_back(getKeyInput('T'));
+    _keys.push_back(getKeyDownInput('T'));
     simulateKeys(_keys);
     Sleep(200);
 }
@@ -74,17 +85,28 @@ void opengMCTerminal() {
 void pressEnter() {
     Sleep(200);
     std::vector<INPUT> _keys;
-    _keys.push_back(getKeyInput(VK_RETURN));
+    _keys.push_back(getKeyDownInput(VK_RETURN));
     simulateKeys(_keys);
     Sleep(200);
 }
 
+void pressWithShift(std::vector<char> _keys) {
+    std::vector<INPUT> result;
+    result.push_back(getKeyDownInput(VK_SHIFT));
+    for (auto _key : _keys)
+        result.push_back(getKeyDownInput(_key));
+    Sleep(50);
+    simulateKeys(result);
+    Sleep(50);
+}
+
 std::vector<INPUT> getKeyInputs() {
     std::vector<INPUT> result;
-    result.push_back(getKeyInput('H'));
-    result.push_back(getKeyInput('O'));
-    result.push_back(getKeyInput('M'));
-    result.push_back(getKeyInput('E'));
+
+    result.push_back(getKeyDownInput('H'));
+    result.push_back(getKeyDownInput('O'));
+    result.push_back(getKeyDownInput('M'));
+    result.push_back(getKeyDownInput('E'));
 
     return result;
 }
@@ -92,6 +114,7 @@ std::vector<INPUT> getKeyInputs() {
 void runBot()
 {
     opengMCTerminal();
+    pressWithShift({ '7' });
 
     auto inputs = getKeyInputs();
     simulateKeys(inputs);
