@@ -34,4 +34,8 @@ public:
     void togglePause();
 
     bool shouldRun();
+
+    void mouseRightClick();
+    void mouseLeftClick();
+    void moveMouseRight();
 };

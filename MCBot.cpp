@@ -115,8 +115,56 @@ void MCBot::teleportHomeCommand() {
     pressEnter();
 }
 
+void MCBot::mouseLeftClick() {
+    INPUT input;
+    input.type = INPUT_MOUSE;
+    input.mi.dx = 0;
+    input.mi.dy = 0;
+    input.mi.dwFlags = ( MOUSEEVENTF_LEFTDOWN);
+    input.mi.mouseData = 0;
+    input.mi.dwExtraInfo = NULL;
+    input.mi.time = 0;
+    SendInput(1, &input, sizeof(INPUT));
+
+    Sleep(50);
+
+    input.type = INPUT_MOUSE;
+    input.mi.dx = 0;
+    input.mi.dy = 0;
+    input.mi.dwFlags = (MOUSEEVENTF_LEFTUP);
+    input.mi.mouseData = 0;
+    input.mi.dwExtraInfo = NULL;
+    input.mi.time = 0;
+    SendInput(1, &input, sizeof(INPUT));
+
+}
+
+void MCBot::moveMouseRight() {
+    SetProcessDPIAware();
+    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+    POINT p;
+    GetCursorPos(&p);
+
+    p.x = screenWidth / 2;
+    p.y = screenHeight / 2;
+    INPUT in[1] = { 0 };
+    in[0].type = INPUT_MOUSE;
+    in[0].mi.dx = 10;
+    in[0].mi.dy = 0;
+    in[0].mi.dwFlags = MOUSEEVENTF_MOVE;
+    SendInput(1, in, sizeof(INPUT));
+    GetCursorPos(&p);
+}
+
+void MCBot::mouseRightClick() {
+
+}
+
 void MCBot::runBot()
 {
+    mouseLeftClick();
 
     if (timer.getSeconds() > 20 * 60) {
         teleportHomeCommand();
