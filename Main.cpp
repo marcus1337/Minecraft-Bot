@@ -71,6 +71,14 @@ void opengMCTerminal() {
     Sleep(200);
 }
 
+void pressEnter() {
+    Sleep(200);
+    std::vector<INPUT> _keys;
+    _keys.push_back(getKeyInput(VK_RETURN));
+    simulateKeys(_keys);
+    Sleep(200);
+}
+
 std::vector<INPUT> getKeyInputs() {
     std::vector<INPUT> result;
     result.push_back(getKeyInput('H'));
@@ -87,6 +95,8 @@ void runBot()
 
     auto inputs = getKeyInputs();
     simulateKeys(inputs);
+
+    pressEnter();
 }
 
 bool isCorrectProcess(DWORD targetProcessID) {
