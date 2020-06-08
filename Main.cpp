@@ -46,20 +46,8 @@ INPUT getKeyInput(int unicode) {
     return ip;
 }
 
-std::vector<INPUT> getKeyInputs() {
-    std::vector<INPUT> result;
-    result.push_back(getKeyInput('T'));
-    result.push_back(getKeyInput('H'));
-    result.push_back(getKeyInput('O'));
-    result.push_back(getKeyInput('M'));
-    result.push_back(getKeyInput('E'));
-
-    return result;
-}
-
 void sendPressedKeyInputs(std::vector<INPUT> inputs) {
     SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
-
 }
 
 void sendLiftedKeyInputs(std::vector<INPUT> inputs) {
@@ -68,14 +56,37 @@ void sendLiftedKeyInputs(std::vector<INPUT> inputs) {
     SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
 }
 
+void simulateKeys(std::vector<INPUT> &inputs)
+{
+    sendPressedKeyInputs(inputs);
+    Sleep(50);
+    sendLiftedKeyInputs(inputs);
+}
+
+void opengMCTerminal() {
+    Sleep(200);
+    std::vector<INPUT> _keys;
+    _keys.push_back(getKeyInput('T'));
+    simulateKeys(_keys);
+    Sleep(200);
+}
+
+std::vector<INPUT> getKeyInputs() {
+    std::vector<INPUT> result;
+    result.push_back(getKeyInput('H'));
+    result.push_back(getKeyInput('O'));
+    result.push_back(getKeyInput('M'));
+    result.push_back(getKeyInput('E'));
+
+    return result;
+}
+
 void runBot()
 {
+    opengMCTerminal();
+
     auto inputs = getKeyInputs();
-    sendPressedKeyInputs(inputs);
-
-    Sleep(50);
-
-    sendLiftedKeyInputs(inputs);
+    simulateKeys(inputs);
 }
 
 bool isCorrectProcess(DWORD targetProcessID) {
