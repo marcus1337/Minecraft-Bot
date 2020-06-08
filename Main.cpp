@@ -3,6 +3,8 @@
 #include <tchar.h>
 #include <string>
 #include "Main.h"
+#include "Timer.h"
+
 
 using namespace std;
 
@@ -33,14 +35,18 @@ DWORD getTargetProcess(std::string windowName) {
     return tmpPID;
 }
 
-
-void runBot()
-{
+INPUT getInput() {
     INPUT ip;
     ip.type = INPUT_KEYBOARD;
     ip.ki.wScan = MapVirtualKey(0x41, MAPVK_VK_TO_VSC);
     ip.ki.time = 0;
     ip.ki.dwExtraInfo = KEYEVENTF_SCANCODE;
+    return ip;
+}
+
+void runBot()
+{
+    INPUT ip = getInput();
 
     ip.ki.wVk = 0x41;
     ip.ki.dwFlags = 0;
@@ -59,11 +65,15 @@ int main() {
 
     DWORD pID = getTargetProcess("Minecraft 1.15.2 - Singleplayer");
 
-    while (true) { //send array of INPUT structs to combine key presses
+    Timer timer;
+    timer.startClock();
+
+    while (true) {
 
         if (isCorrectProcess(pID))
             runBot();
 
+        cout << "TEST: " << timer.getSeconds() << endl;
         Sleep(10);
     }
 
