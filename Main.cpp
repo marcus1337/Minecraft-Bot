@@ -4,7 +4,7 @@
 #include <string>
 #include "Main.h"
 #include "Timer.h"
-
+#include <vector>
 
 using namespace std;
 
@@ -35,24 +35,25 @@ DWORD getTargetProcess(std::string windowName) {
     return tmpPID;
 }
 
-INPUT getInput() {
+INPUT getKeyInput(int unicode) {
     INPUT ip;
     ip.type = INPUT_KEYBOARD;
-    ip.ki.wScan = MapVirtualKey(0x41, MAPVK_VK_TO_VSC);
+    ip.ki.wScan = MapVirtualKey(unicode, MAPVK_VK_TO_VSC);
     ip.ki.time = 0;
     ip.ki.dwExtraInfo = KEYEVENTF_SCANCODE;
+    ip.ki.wVk = unicode;
+    ip.ki.dwFlags = 0;
     return ip;
 }
 
 void runBot()
 {
-    INPUT ip = getInput();
+    INPUT ip = getKeyInput(0x57);
 
-    ip.ki.wVk = 0x41;
-    ip.ki.dwFlags = 0;
     SendInput(1, &ip, sizeof(INPUT));
 
     Sleep(50);
+
     ip.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
     SendInput(1, &ip, sizeof(INPUT));
 }
@@ -73,7 +74,6 @@ int main() {
         if (isCorrectProcess(pID))
             runBot();
 
-        cout << "TEST: " << timer.getSeconds() << endl;
         Sleep(10);
     }
 
