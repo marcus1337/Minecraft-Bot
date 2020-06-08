@@ -117,7 +117,13 @@ void MCBot::teleportHomeCommand() {
 
 void MCBot::runBot()
 {
-    teleportHomeCommand();
+
+    if (timer.getSeconds() > 20 * 60) {
+        teleportHomeCommand();
+
+        timer.startClock();
+    }
+
 }
 
 bool MCBot::isCorrectProcess(DWORD _targetProcessID) {
@@ -132,6 +138,7 @@ void MCBot::togglePause() {
     if (GetKeyState('P') & 0x8000/*Check if high-order bit is set (1 << 15)*/)
     {
         paused = !paused;
+        timer.startClock();
     }
 }
 
