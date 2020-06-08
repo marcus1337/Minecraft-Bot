@@ -46,16 +46,34 @@ INPUT getKeyInput(int unicode) {
     return ip;
 }
 
+std::vector<INPUT> getKeyInputs() {
+    std::vector<INPUT> result;
+    result.push_back(getKeyInput(0x57));
+
+    return result;
+}
+
+void sendPressedKeyInputs(std::vector<INPUT> inputs) {
+    for (auto& ip : inputs) {
+        SendInput(1, &ip, sizeof(INPUT));
+    }
+}
+
+void sendLiftedKeyInputs(std::vector<INPUT> inputs) {
+    for (auto& ip : inputs) {
+        ip.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+        SendInput(1, &ip, sizeof(INPUT));
+    }
+}
+
 void runBot()
 {
-    INPUT ip = getKeyInput(0x57);
-
-    SendInput(1, &ip, sizeof(INPUT));
+    auto inputs = getKeyInputs();
+    sendPressedKeyInputs(inputs);
 
     Sleep(50);
 
-    ip.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-    SendInput(1, &ip, sizeof(INPUT));
+    sendLiftedKeyInputs(inputs);
 }
 
 bool isCorrectProcess(DWORD targetProcessID) {
