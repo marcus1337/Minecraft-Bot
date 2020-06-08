@@ -48,22 +48,24 @@ INPUT getKeyInput(int unicode) {
 
 std::vector<INPUT> getKeyInputs() {
     std::vector<INPUT> result;
-    result.push_back(getKeyInput(0x57));
+    result.push_back(getKeyInput('T'));
+    result.push_back(getKeyInput('H'));
+    result.push_back(getKeyInput('O'));
+    result.push_back(getKeyInput('M'));
+    result.push_back(getKeyInput('E'));
 
     return result;
 }
 
 void sendPressedKeyInputs(std::vector<INPUT> inputs) {
-    for (auto& ip : inputs) {
-        SendInput(1, &ip, sizeof(INPUT));
-    }
+    SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
+
 }
 
 void sendLiftedKeyInputs(std::vector<INPUT> inputs) {
-    for (auto& ip : inputs) {
+    for (auto& ip : inputs)
         ip.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-        SendInput(1, &ip, sizeof(INPUT));
-    }
+    SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
 }
 
 void runBot()
@@ -80,19 +82,35 @@ bool isCorrectProcess(DWORD targetProcessID) {
     return targetProcessID == getCurrentProcess();
 }
 
+bool paused = false;
+
+bool isPaused() {
+    return paused;
+}
+
+void togglePause() {
+    if (GetKeyState('P') & 0x8000/*Check if high-order bit is set (1 << 15)*/)
+    {
+        paused = !paused;
+    }
+}
+
 int main() {
 
     DWORD pID = getTargetProcess("Minecraft 1.15.2 - Singleplayer");
+    paused = true;
 
     Timer timer;
     timer.startClock();
 
     while (true) {
 
-        if (isCorrectProcess(pID))
+        togglePause();
+
+        if (isCorrectProcess(pID) && !isPaused())
             runBot();
 
-        Sleep(10);
+        Sleep(60);
     }
 
     return 0;
