@@ -5,15 +5,17 @@
 #include <string>
 #include "Timer.h"
 #include <vector>
+#include <string>
 
 class MCBot {
     Timer timer;
     DWORD targetProcess;
     bool paused = false;
     int slot = 1;
-
+    std::string targetProcessName;
 public:
     MCBot();
+    MCBot(std::string _targetProcessName);
 
     DWORD getCurrentProcess();
     DWORD getTargetProcess(std::string windowName);

@@ -4,7 +4,14 @@
 using namespace std;
 
 MCBot::MCBot() {
-    targetProcess = getTargetProcess("Minecraft 1.15.2 - Singleplayer");
+    targetProcessName = "Minecraft 1.15.2 - Singleplayer";
+    targetProcess = getTargetProcess(targetProcessName);
+    paused = true;
+}
+
+MCBot::MCBot(std::string _targetProcessName) {
+    targetProcessName = _targetProcessName;
+    targetProcess = getTargetProcess(targetProcessName);
     paused = true;
 }
 
