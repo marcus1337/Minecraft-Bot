@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
 
-    MCBot mcBot;
+    MCBot mcBot("hej");
 
     while (true) {
 
