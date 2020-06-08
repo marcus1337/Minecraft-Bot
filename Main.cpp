@@ -100,26 +100,24 @@ void pressWithShift(std::vector<char> _keys) {
     Sleep(50);
 }
 
-std::vector<INPUT> getKeyInputs() {
+std::vector<INPUT> getKeyInputs(std::vector<char> _keys) {
     std::vector<INPUT> result;
-
-    result.push_back(getKeyDownInput('H'));
-    result.push_back(getKeyDownInput('O'));
-    result.push_back(getKeyDownInput('M'));
-    result.push_back(getKeyDownInput('E'));
-
+    for (auto _key : _keys) {
+        result.push_back(getKeyDownInput(_key));
+    }
     return result;
+}
+
+void teleportHomeCommand() {
+    opengMCTerminal();
+    pressWithShift({ '7' });
+    simulateKeys(getKeyInputs({ 'H','O','M','E' }));
+    pressEnter();
 }
 
 void runBot()
 {
-    opengMCTerminal();
-    pressWithShift({ '7' });
-
-    auto inputs = getKeyInputs();
-    simulateKeys(inputs);
-
-    pressEnter();
+    teleportHomeCommand();
 }
 
 bool isCorrectProcess(DWORD targetProcessID) {
