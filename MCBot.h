@@ -10,6 +10,7 @@ class MCBot {
     Timer timer;
     DWORD targetProcess;
     bool paused = false;
+    int slot = 1;
 
 public:
     MCBot();
@@ -38,4 +39,5 @@ public:
     void mouseRightClick();
     void mouseLeftClick();
     void moveMouseRight();
+    void moveForward();
 };

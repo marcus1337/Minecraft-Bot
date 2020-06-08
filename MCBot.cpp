@@ -162,13 +162,18 @@ void MCBot::mouseRightClick() {
 
 }
 
+void MCBot::moveForward() {
+    simulateKeys(getKeyInputs({ 'W' }));
+}
+
 void MCBot::runBot()
 {
+    moveForward();
     mouseLeftClick();
 
-    if (timer.getSeconds() > 20 * 60) {
-        teleportHomeCommand();
-
+    if (timer.getSeconds() > 15 * 60) {
+        simulateKeys(getKeyInputs({ (char)('1'+ slot) }));
+        slot++;
         timer.startClock();
     }
 
