@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
 
-    MCBot mcBot("hej");
+    MCBot mcBot("Minecraft 1.15.2 - Multiplayer (3rd-party)");
 
     while (true) {
 

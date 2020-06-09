@@ -135,14 +135,14 @@ void MCBot::mouseLeftClick() {
 
     Sleep(50);
 
-    input.type = INPUT_MOUSE;
+   /* input.type = INPUT_MOUSE;
     input.mi.dx = 0;
     input.mi.dy = 0;
     input.mi.dwFlags = (MOUSEEVENTF_LEFTUP);
     input.mi.mouseData = 0;
     input.mi.dwExtraInfo = NULL;
     input.mi.time = 0;
-    SendInput(1, &input, sizeof(INPUT));
+    SendInput(1, &input, sizeof(INPUT));*/
 
 }
 
@@ -178,7 +178,7 @@ void MCBot::runBot()
     moveForward();
     mouseLeftClick();
 
-    if (timer.getSeconds() > 15 * 60) {
+    if (timer.getSeconds() > 2.7f * 60) {
         simulateKeys(getKeyInputs({ (char)('1'+ slot) }));
         slot++;
         timer.startClock();
