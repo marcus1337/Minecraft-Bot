@@ -22,8 +22,10 @@ void MCBot::init(std::string _targetProcessName)
 
 void MCBot::pollCommands() {
     while (shouldThreadRun) {
-        cout << "hello world 123\n";
-        Sleep(500);
+        
+        togglePause();
+
+        Sleep(30);
     }
 }
 
@@ -212,11 +214,26 @@ bool MCBot::isPaused() {
 }
 
 void MCBot::togglePause() {
+
+    bool anyPress = false;
     if (GetKeyState('P') & 0x8000/*Check if high-order bit is set (1 << 15)*/)
     {
-        paused = !paused;
-        timer.startClock();
+        if (timer.getSeconds() > 0.5f) {
+            anyPress = true;
+            paused = !paused;
+        }
     }
+
+    if (GetKeyState('M') & 0x8000/*Check if high-order bit is set (1 << 15)*/)
+    {
+        anyPress = true;
+        if (timer.getSeconds() > 0.5f)
+            cout << "pressed M" << endl;
+    }
+
+    if(anyPress)
+        timer.startClock();
+
 }
 
 bool MCBot::shouldRun() {

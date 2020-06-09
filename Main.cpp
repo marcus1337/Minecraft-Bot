@@ -10,8 +10,6 @@ int main() {
 
     while (true) {
 
-        mcBot.togglePause();
-
         if (mcBot.shouldRun())
             mcBot.runBot();
 
