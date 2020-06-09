@@ -238,6 +238,7 @@ void MCBot::togglePause() {
         if (timer.getSeconds() > 0.5f) {
             paused = !paused;
             if (paused) {
+                slot = 0;
                 liftLeftMouseButton();
                 sendLiftedKeyInputs(getKeyInputs({ VK_SHIFT }));
             }
