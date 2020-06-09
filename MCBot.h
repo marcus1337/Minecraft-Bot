@@ -19,6 +19,7 @@ class MCBot {
     std::thread _thread;
     std::atomic<bool> shouldThreadRun;
     std::atomic<bool> paused;
+    void liftLeftMouseButton();
 
 public:
     MCBot();

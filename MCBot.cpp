@@ -24,7 +24,6 @@ void MCBot::pollCommands() {
     while (shouldThreadRun) {
         
         togglePause();
-
         Sleep(30);
     }
 }
@@ -101,19 +100,15 @@ void MCBot::simulateKeys(std::vector<INPUT> &inputs)
 }
 
 void MCBot::opengMCTerminal() {
-    Sleep(200);
     std::vector<INPUT> _keys;
     _keys.push_back(getKeyDownInput('T'));
     simulateKeys(_keys);
-    Sleep(200);
 }
 
 void MCBot::pressEnter() {
-    Sleep(200);
     std::vector<INPUT> _keys;
     _keys.push_back(getKeyDownInput(VK_RETURN));
     simulateKeys(_keys);
-    Sleep(200);
 }
 
 void MCBot::pressWithShift(std::vector<char> _keys) {
@@ -121,9 +116,7 @@ void MCBot::pressWithShift(std::vector<char> _keys) {
     result.push_back(getKeyDownInput(VK_SHIFT));
     for (auto _key : _keys)
         result.push_back(getKeyDownInput(_key));
-    Sleep(50);
     simulateKeys(result);
-    Sleep(50);
 }
 
 std::vector<INPUT> MCBot::getKeyInputs(std::vector<char> _keys) {
@@ -154,15 +147,20 @@ void MCBot::mouseLeftClick() {
 
     Sleep(50);
 
-   /* input.type = INPUT_MOUSE;
+}
+
+void MCBot::liftLeftMouseButton()
+{
+    Sleep(50);
+    INPUT input;
+    input.type = INPUT_MOUSE;
     input.mi.dx = 0;
     input.mi.dy = 0;
     input.mi.dwFlags = (MOUSEEVENTF_LEFTUP);
     input.mi.mouseData = 0;
     input.mi.dwExtraInfo = NULL;
     input.mi.time = 0;
-    SendInput(1, &input, sizeof(INPUT));*/
-
+    SendInput(1, &input, sizeof(INPUT));
 }
 
 void MCBot::moveMouseRight() {
@@ -216,19 +214,24 @@ bool MCBot::isPaused() {
 void MCBot::togglePause() {
 
     bool anyPress = false;
-    if (GetKeyState('P') & 0x8000/*Check if high-order bit is set (1 << 15)*/)
+    if (GetKeyState('P') & 0x8000)
     {
+        anyPress = true;
+
         if (timer.getSeconds() > 0.5f) {
-            anyPress = true;
             paused = !paused;
+            if (paused) {
+                liftLeftMouseButton();
+            }
         }
     }
 
-    if (GetKeyState('M') & 0x8000/*Check if high-order bit is set (1 << 15)*/)
+    if (GetKeyState('O') & 0x8000)
     {
         anyPress = true;
-        if (timer.getSeconds() > 0.5f)
-            cout << "pressed M" << endl;
+        if (timer.getSeconds() > 0.5f) {
+            teleportHomeCommand();
+        }
     }
 
     if(anyPress)
