@@ -13,6 +13,7 @@ MCBot::MCBot(std::string _targetProcessName) {
 
 void MCBot::init(std::string _targetProcessName)
 {
+    moveCounter = 0;
     shouldThreadRun = true;
     targetProcessName = _targetProcessName;
     targetProcess = getTargetProcess(targetProcessName);
@@ -190,17 +191,33 @@ void MCBot::moveForward() {
     simulateKeys(getKeyInputs({ 'W' }));
 }
 
+void MCBot::crouchOccasionally()
+{
+    moveCounter++;
+    if (moveCounter > 20) {
+        sendPressedKeyInputs(getKeyInputs({ VK_SHIFT }));
+        if (moveCounter > 40) {
+            sendLiftedKeyInputs(getKeyInputs({ VK_SHIFT }));
+            moveCounter = 0;
+        }
+    }
+}
+
+void MCBot::swapEquipment()
+{
+    if (timer.getSeconds() > 2.7f * 60) {
+        simulateKeys(getKeyInputs({ (char)('1' + slot) }));
+        slot++;
+        timer.startClock();
+    }
+}
+
 void MCBot::runBot()
 {
     moveForward();
     mouseLeftClick();
-
-    if (timer.getSeconds() > 2.7f * 60) {
-        simulateKeys(getKeyInputs({ (char)('1'+ slot) }));
-        slot++;
-        timer.startClock();
-    }
-
+    crouchOccasionally();
+    swapEquipment();
 }
 
 bool MCBot::isCorrectProcess(DWORD _targetProcessID) {
@@ -222,6 +239,7 @@ void MCBot::togglePause() {
             paused = !paused;
             if (paused) {
                 liftLeftMouseButton();
+                sendLiftedKeyInputs(getKeyInputs({ VK_SHIFT }));
             }
         }
     }

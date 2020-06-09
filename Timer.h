@@ -7,6 +7,7 @@ class Timer {
     sys_time<std::chrono::milliseconds> time_;
 public:
 
-    float getSeconds();
+    float getSeconds() const;
+    int getSecondsOnly() const;
     void startClock();
 };

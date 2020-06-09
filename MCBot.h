@@ -21,6 +21,8 @@ class MCBot {
     std::atomic<bool> paused;
     void liftLeftMouseButton();
 
+    int moveCounter;
+
 public:
     MCBot();
     ~MCBot();
@@ -42,6 +44,8 @@ public:
     void pressWithShift(std::vector<char> _keys);
 
     void teleportHomeCommand();
+    void crouchOccasionally();
+    void swapEquipment();
     void runBot();
     bool isCorrectProcess(DWORD _targetProcessID);
     bool isPaused();
