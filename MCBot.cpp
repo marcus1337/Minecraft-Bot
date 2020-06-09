@@ -4,15 +4,32 @@
 using namespace std;
 
 MCBot::MCBot() {
-    targetProcessName = "Minecraft 1.15.2 - Singleplayer";
-    targetProcess = getTargetProcess(targetProcessName);
-    paused = true;
+    init("Minecraft 1.15.2 - Singleplayer");
 }
 
 MCBot::MCBot(std::string _targetProcessName) {
+    init(_targetProcessName);
+}
+
+void MCBot::init(std::string _targetProcessName)
+{
+    shouldThreadRun = true;
     targetProcessName = _targetProcessName;
     targetProcess = getTargetProcess(targetProcessName);
     paused = true;
+    _thread = std::thread(&MCBot::pollCommands, this);
+}
+
+void MCBot::pollCommands() {
+    while (shouldThreadRun) {
+        cout << "hello world 123\n";
+        Sleep(500);
+    }
+}
+
+MCBot::~MCBot() {
+    shouldThreadRun = false;
+    _thread.join();
 }
 
 DWORD MCBot::getCurrentProcess() {

@@ -6,16 +6,26 @@
 #include "Timer.h"
 #include <vector>
 #include <string>
+#include <thread>
+#include <atomic>
 
 class MCBot {
     Timer timer;
     DWORD targetProcess;
-    bool paused = false;
     int slot = 1;
     std::string targetProcessName;
+    void pollCommands();
+
+    std::thread _thread;
+    std::atomic<bool> shouldThreadRun;
+    std::atomic<bool> paused;
+
 public:
     MCBot();
+    ~MCBot();
     MCBot(std::string _targetProcessName);
+
+    void init(std::string _targetProcessName);
 
     DWORD getCurrentProcess();
     DWORD getTargetProcess(std::string windowName);
